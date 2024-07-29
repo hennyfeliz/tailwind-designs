@@ -17,13 +17,25 @@ input[type="range"] {
   height: 8px;
   outline: none;
   border-radius: 14px;
-  background: linear-gradient(
-    to right,
-    #000000 0%,
-    #000000 var(--range-progress),
-    #e5e7eb var(--range-progress),
-    #e5e7eb 100%
-  );
+  &.dark_ {
+    background: linear-gradient(
+      to right,
+      #ffffff 0%,
+      #ffffff var(--range-progress),
+      #3e3e3e var(--range-progress),
+      #2c2c2c 100%
+    );
+  }
+
+  &.light_ {
+    background: linear-gradient(
+      to right,
+      #000000 0%,
+      #000000 var(--range-progress),
+      #e5e7eb var(--range-progress),
+      #e5e7eb 100%
+    );
+  }
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -32,9 +44,9 @@ input[type="range"]::-webkit-slider-thumb {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #ffffff;
   cursor: pointer;
   border: 2px solid black;
+  background: #ffffff;
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -43,7 +55,7 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
-  border: 2px solid black;
+  background: #000000;
 }
 
 input[type="range"]::-moz-range-track {
