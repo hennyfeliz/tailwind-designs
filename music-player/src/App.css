@@ -69,7 +69,6 @@ input[type="range"]::-moz-range-track {
 }
 
 /* PLAYLIST */
-
 .hidden {
   opacity: 0;
   visibility: hidden;
