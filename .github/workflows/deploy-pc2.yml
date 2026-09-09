@@ -1,0 +1,45 @@
+name: Deploy Music Player to PC2
+
+on:
+  push:
+    branches:
+      - codex/pc2-deploy
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pc2-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, Windows, X64, pc2-docker]
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify shared deployer
+        shell: pwsh
+        run: |
+          $engine = 'C:\Deploy\pc2-deployer\scripts\deploy.ps1'
+          if (-not (Test-Path -LiteralPath $engine -PathType Leaf)) {
+            throw "No se encontro el motor generico en $engine"
+          }
+
+      - name: Deploy Docker Compose service
+        shell: pwsh
+        run: |
+          $engine = 'C:\Deploy\pc2-deployer\scripts\deploy.ps1'
+          $manifest = Join-Path $env:GITHUB_WORKSPACE '.pc2\deploy.json'
+
+          & $engine `
+            -ManifestPath $manifest `
+            -WorkspaceRoot $env:GITHUB_WORKSPACE
+
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }

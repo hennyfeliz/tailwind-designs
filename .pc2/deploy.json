@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "project": "tailwind-designs",
+  "compose": {
+    "file": "docker-compose.yml",
+    "projectName": "tailwind-designs",
+    "service": "music-player",
+    "envFile": "C:\\Deploy\\tailwind-designs.env",
+    "includeDependencies": false
+  },
+  "hostPort": 4322,
+  "health": {
+    "type": "http",
+    "url": "http://127.0.0.1:4322/",
+    "expectedStatus": 200,
+    "timeoutSeconds": 90,
+    "intervalSeconds": 3
+  },
+  "cloudflare": {
+    "hostname": "music-player.hennyfeliz.online"
+  }
+}
