@@ -25,7 +25,17 @@ jobs:
       - name: Verify shared deployer
         shell: pwsh
         run: |
+          $engineRoot = 'C:\Deploy\pc2-deployer'
           $engine = 'C:\Deploy\pc2-deployer\scripts\deploy.ps1'
+          if (-not (Test-Path -LiteralPath (Join-Path $engineRoot '.git') -PathType Container)) {
+            throw "No se encontro el repositorio del motor generico en $engineRoot"
+          }
+
+          git -C $engineRoot pull --ff-only
+          if ($LASTEXITCODE -ne 0) {
+            throw "No se pudo actualizar el motor generico con fast-forward"
+          }
+
           if (-not (Test-Path -LiteralPath $engine -PathType Leaf)) {
             throw "No se encontro el motor generico en $engine"
           }
