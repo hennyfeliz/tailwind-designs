@@ -1,10 +1,12 @@
 name: Deploy Music Player to PC2
 
 on:
-  push:
-    branches:
-      - codex/pc2-deploy
   workflow_dispatch:
+    inputs:
+      reviewed_commit:
+        description: SHA of the locally reviewed commit approved for PC2
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -15,12 +17,24 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.reviewed_commit == github.sha && github.ref == 'refs/heads/codex/pc2-deploy'
     runs-on: [self-hosted, Windows, X64, pc2-docker]
     timeout-minutes: 45
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.reviewed_commit }}
+
+      - name: Assert reviewed commit
+        shell: pwsh
+        run: |
+          $expected = '${{ inputs.reviewed_commit }}'
+          $actual = (git rev-parse HEAD).Trim()
+          if ($actual -ne $expected) {
+            throw "Checkout $actual does not match reviewed commit $expected"
+          }
 
       - name: Verify shared deployer
         shell: pwsh
